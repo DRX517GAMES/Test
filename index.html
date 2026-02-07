@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moja Gra PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { background: #222; color: white; text-align: center; font-family: sans-serif; }
+        canvas { background: #000; display: block; margin: 20px auto; border: 2px solid #444; }
+    </style>
+</head>
+<body>
+    <h1>Moja Pierwsza Gra PWA</h1>
+    <p>Zainstaluj mnie, by grać offline!</p>
+    <canvas id="gameCanvas" width="300" height="300"></canvas>
+
+    <script>
+        // Prosty przykład gry (kwadrat poruszający się za dotykiem/myszką)
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let x = 150, y = 150;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0f0';
+            ctx.fillRect(x - 25, y - 25, 50, 50);
+            requestAnimationFrame(draw);
+        }
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            x = e.clientX - rect.left;
+            y = e.clientY - rect.top;
+        });
+        draw();
+
+        // REJESTRACJA SERVICE WORKERA (To jest kluczowe!)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
